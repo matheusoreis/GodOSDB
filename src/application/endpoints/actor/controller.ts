@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -10,6 +11,7 @@ import {
 import { CreateActorDto } from './dtos/create';
 import { UpdateActorDto } from './dtos/update';
 import ActorProvider from './provider';
+import { DeleteActorDto } from './dtos/delete';
 
 @Controller('actor')
 export default class ActorController {
@@ -38,5 +40,10 @@ export default class ActorController {
   @Patch()
   public async update(@Body() data: UpdateActorDto) {
     return await this.provider.update(data);
+  }
+
+  @Delete()
+  public async delete(@Body() data: DeleteActorDto) {
+    return await this.provider.delete(data);
   }
 }

@@ -8,12 +8,13 @@ import { InjectConnection } from 'nest-knexjs';
 import { CreateActorDto } from './dtos/create';
 import { UpdateActorDto } from './dtos/update';
 import { ActorEntity } from './entities/actor';
+import { DeleteActorDto } from './dtos/delete';
 
 @Injectable()
 export default class ActorProvider {
   private readonly table: string = 'actors';
 
-  constructor(@InjectConnection() private readonly knex: Knex) {}
+  constructor(@InjectConnection() private readonly knex: Knex) { }
 
   private async getOrFail(id: number): Promise<ActorEntity> {
     const row = await this.knex<ActorEntity>(this.table)
@@ -71,5 +72,24 @@ export default class ActorProvider {
     }
 
     return row;
+  }
+
+  public async delete(data: DeleteActorDto): Promise<{ message: string }> {
+    await this.getOrFail(data.id);
+
+    const row = await this.knex<ActorEntity>(this.table)
+      .where('id', data.id)
+      .andWhere('accountId', data.accountId)
+      .del();
+
+    if (!row) {
+      throw new NotFoundException(
+        `Registro com o id ${data.id} não encontrado ou não pertence ao usuário com id ${data.accountId}.`,
+      );
+    }
+
+    return {
+      message: `Personagem com id ${data.id}, apagado com sucesso!`,
+    }
   }
 }
