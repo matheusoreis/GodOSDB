@@ -12,10 +12,6 @@ export class CreateActorDto {
   @IsNotEmpty({ message: 'O nome da regra é obrigatório!' })
   name: string;
 
-  @IsString({ message: 'A sprite deve ser um texto!' })
-  @IsNotEmpty({ message: 'A sprite é obrigatório!' })
-  sprite: string;
-
   @IsNumber({}, { message: 'O mapa deve ser um número válido!' })
   @IsNotEmpty({ message: 'O mapa deve ser informado!' })
   @Transform(({ value }) => Number.parseInt(value, 10))

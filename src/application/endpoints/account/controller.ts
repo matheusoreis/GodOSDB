@@ -12,7 +12,7 @@ import AccountProvider from './provider';
 
 @Controller('account')
 export default class AccountController {
-  constructor(private readonly provider: AccountProvider) {}
+  constructor(private readonly provider: AccountProvider) { }
 
   @Get()
   public async getAll() {

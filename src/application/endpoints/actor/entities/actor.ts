@@ -1,7 +1,6 @@
 export class ActorEntity {
   id: number;
   name: string;
-  sprite: string;
   directionX: number;
   directionY: number;
   positionX: number;

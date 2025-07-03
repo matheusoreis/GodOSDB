@@ -1,3 +1,5 @@
+import { ActorEntity } from "../../actor/entities/actor";
+
 export class UserEntity {
   id: number;
   email: string;
@@ -11,4 +13,8 @@ export class SafeUserEntity implements Omit<UserEntity, 'password'> {
   email: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export class UserEntityWithActors extends SafeUserEntity {
+  actors: ActorEntity[];
 }

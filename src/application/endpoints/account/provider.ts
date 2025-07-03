@@ -9,7 +9,9 @@ import { InjectConnection } from 'nest-knexjs';
 import { BcryptProvider } from 'src/application/common/bcrypt/provider';
 import { SignInUserDto } from './dtos/sign-in';
 import { SignUpDto } from './dtos/sign-up';
-import { SafeUserEntity, UserEntity } from './entities/user';
+import { SafeUserEntity, UserEntity, UserEntityWithActors } from './entities/user';
+import ActorProvider from '../actor/provider';
+import { ActorEntity } from '../actor/entities/actor';
 
 @Injectable()
 export default class AccountProvider {
@@ -17,8 +19,9 @@ export default class AccountProvider {
 
   constructor(
     @InjectConnection() private readonly knex: Knex,
+    private readonly actorProvider: ActorProvider,
     private readonly bcrypt: BcryptProvider,
-  ) {}
+  ) { }
 
   private async getOrFail(id: number): Promise<UserEntity> {
     const row = await this.knex<UserEntity>(this.table).where('id', id).first();
@@ -37,7 +40,7 @@ export default class AccountProvider {
     return await this.getOrFail(userId);
   }
 
-  public async signIn(data: SignInUserDto): Promise<SafeUserEntity> {
+  public async signIn(data: SignInUserDto): Promise<UserEntityWithActors> {
     const user: UserEntity | undefined = await this.knex<UserEntity>(this.table)
       .where('email', data.email)
       .first();
@@ -56,9 +59,12 @@ export default class AccountProvider {
       throw new UnauthorizedException('Ops! A Senha informada está incorreta!');
     }
 
+    var actors = await this.actorProvider.getByAccountId(user.id);
+
     const { password, ...safeUser } = user;
     return {
       ...safeUser,
+      actors
     };
   }
 

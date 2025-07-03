@@ -13,7 +13,7 @@ import ActorProvider from './provider';
 
 @Controller('actor')
 export default class ActorController {
-  constructor(private readonly provider: ActorProvider) {}
+  constructor(private readonly provider: ActorProvider) { }
 
   @Get()
   public async getAll() {
