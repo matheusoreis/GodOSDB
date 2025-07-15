@@ -8,12 +8,13 @@ import { InjectConnection } from 'nest-knexjs';
 import { CreateRuleDto } from './dtos/create';
 import { UpdateRuleDto } from './dtos/update';
 import { RuleEntity } from './entities/rule';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Injectable()
 export default class RuleProvider {
   private readonly table: string = 'rules';
 
-  constructor(@InjectConnection() private readonly knex: Knex) {}
+  constructor(@InjectConnection('sqlite') private readonly knex: Knex) {}
 
   private async getOrFail(id: number): Promise<RuleEntity> {
     const row = await this.knex<RuleEntity>(this.table).where('id', id).first();

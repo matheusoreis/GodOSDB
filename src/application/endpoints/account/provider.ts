@@ -7,21 +7,24 @@ import {
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
 import { BcryptProvider } from 'src/application/common/bcrypt/provider';
+import ActorProvider from '../actor/provider';
 import { SignInUserDto } from './dtos/sign-in';
 import { SignUpDto } from './dtos/sign-up';
-import { SafeUserEntity, UserEntity, UserEntityWithActors } from './entities/user';
-import ActorProvider from '../actor/provider';
-import { ActorEntity } from '../actor/entities/actor';
+import {
+  SafeUserEntity,
+  UserEntity,
+  UserEntityWithActors,
+} from './entities/user';
 
 @Injectable()
 export default class AccountProvider {
   private readonly table: string = 'accounts';
 
   constructor(
-    @InjectConnection() private readonly knex: Knex,
+    @InjectConnection('sqlite') private readonly knex: Knex,
     private readonly actorProvider: ActorProvider,
     private readonly bcrypt: BcryptProvider,
-  ) { }
+  ) {}
 
   private async getOrFail(id: number): Promise<UserEntity> {
     const row = await this.knex<UserEntity>(this.table).where('id', id).first();
@@ -64,7 +67,7 @@ export default class AccountProvider {
     const { password, ...safeUser } = user;
     return {
       ...safeUser,
-      actors
+      actors,
     };
   }
 

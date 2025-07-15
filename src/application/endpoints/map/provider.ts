@@ -13,7 +13,7 @@ import { MapEntity } from './entities/map';
 export default class MapProvider {
   private readonly table: string = 'maps';
 
-  constructor(@InjectConnection() private readonly knex: Knex) {}
+  constructor(@InjectConnection('sqlite') private readonly knex: Knex) {}
 
   private async getOrFail(id: number): Promise<MapEntity> {
     const row = await this.knex<MapEntity>(this.table).where('id', id).first();

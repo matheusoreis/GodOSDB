@@ -14,7 +14,7 @@ import { DeleteActorDto } from './dtos/delete';
 export default class ActorProvider {
   private readonly table: string = 'actors';
 
-  constructor(@InjectConnection() private readonly knex: Knex) { }
+  constructor(@InjectConnection('sqlite') private readonly knex: Knex) {}
 
   private async getOrFail(id: number): Promise<ActorEntity> {
     const row = await this.knex<ActorEntity>(this.table)
@@ -90,6 +90,6 @@ export default class ActorProvider {
 
     return {
       message: `Personagem com id ${data.id}, apagado com sucesso!`,
-    }
+    };
   }
 }

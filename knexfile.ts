@@ -28,6 +28,22 @@ const databases: { [key: string]: Knex.Config } = {
       extension: process.env.SEED_EXTENSION ?? 'ts',
     },
   },
+  development: {
+    client: 'sqlite3',
+    connection: {
+      filename: `./${process.env.SQLITE_FILENAME ?? 'database'}.sqlite3`,
+    },
+    useNullAsDefault: true,
+    migrations: {
+      directory: process.env.MIGRATIONS_DIRECTORY ?? 'migrations',
+      tableName: process.env.MIGRATIONS_TABLE ?? 'migrations',
+      extension: process.env.MIGRATIONS_EXTENSION ?? 'ts',
+    },
+    seeds: {
+      directory: process.env.SEED_DIRECTORY ?? 'seeds',
+      extension: process.env.SEED_EXTENSION ?? 'ts',
+    },
+  },
 };
 
 module.exports = databases;
