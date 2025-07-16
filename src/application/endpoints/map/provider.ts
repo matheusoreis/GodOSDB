@@ -32,9 +32,9 @@ export default class MapProvider {
     return await this.getOrFail(id);
   }
 
-  public async create(data: CreateMapDto): Promise<MapEntity> {
+  public async create(body: CreateMapDto): Promise<MapEntity> {
     const [row] = await this.knex<MapEntity>(this.table)
-      .insert(data)
+      .insert(body)
       .returning('*');
 
     return row;
@@ -55,22 +55,22 @@ export default class MapProvider {
     return id;
   }
 
-  public async update(data: UpdateMapDto): Promise<MapEntity> {
-    await this.getOrFail(data.id);
+  public async update(id: number, body: UpdateMapDto): Promise<MapEntity> {
+    await this.getOrFail(id);
 
-    if (Object.keys(data).length === 0) {
+    if (Object.keys(body).length === 0) {
       throw new BadRequestException(
         'Nenhum dado para atualizar foi fornecido.',
       );
     }
 
     const [row] = await this.knex<MapEntity>(this.table)
-      .where('id', data.id)
-      .update({ ...data, updatedAt: new Date() })
+      .where('id', id)
+      .update({ ...body, updatedAt: new Date() })
       .returning('*');
     if (!row) {
       throw new BadRequestException(
-        `Falha ao atualizar o registro com id ${data.id}`,
+        `Falha ao atualizar o registro com id ${id}`,
       );
     }
 

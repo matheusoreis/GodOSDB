@@ -30,8 +30,11 @@ export default class RuleController {
     return await this.provider.create(data);
   }
 
-  @Patch()
-  public async update(@Body() data: UpdateRuleDto) {
-    return await this.provider.update(data);
+  @Patch(':id')
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateRuleDto,
+  ) {
+    return await this.provider.update(id, data);
   }
 }

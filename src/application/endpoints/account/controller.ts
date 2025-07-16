@@ -12,17 +12,7 @@ import AccountProvider from './provider';
 
 @Controller('account')
 export default class AccountController {
-  constructor(private readonly provider: AccountProvider) { }
-
-  @Get()
-  public async getAll() {
-    return await this.provider.getAll();
-  }
-
-  @Get(':id')
-  public async getById(@Param('id', ParseIntPipe) id: number) {
-    return await this.provider.getById(id);
-  }
+  constructor(private readonly provider: AccountProvider) {}
 
   @Post('sign-in')
   public async signIn(@Body() data: SignInUserDto) {

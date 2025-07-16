@@ -56,8 +56,8 @@ export default class RuleProvider {
     return id;
   }
 
-  public async update(data: UpdateRuleDto): Promise<RuleEntity> {
-    await this.getOrFail(data.id);
+  public async update(id: number, data: UpdateRuleDto): Promise<RuleEntity> {
+    await this.getOrFail(id);
 
     if (Object.keys(data).length === 0) {
       throw new BadRequestException(
@@ -66,12 +66,12 @@ export default class RuleProvider {
     }
 
     const [row] = await this.knex<RuleEntity>(this.table)
-      .where('id', data.id)
+      .where('id', id)
       .update({ ...data, updatedAt: new Date() })
       .returning('*');
     if (!row) {
       throw new BadRequestException(
-        `Falha ao atualizar o registro com id ${data.id}`,
+        `Falha ao atualizar o registro com id ${id}`,
       );
     }
 

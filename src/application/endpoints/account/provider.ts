@@ -35,14 +35,6 @@ export default class AccountProvider {
     return row;
   }
 
-  public async getAll() {
-    return await this.knex<UserEntity>(this.table).select('*');
-  }
-
-  public async getById(userId: number) {
-    return await this.getOrFail(userId);
-  }
-
   public async signIn(data: SignInUserDto): Promise<UserEntityWithActors> {
     const user: UserEntity | undefined = await this.knex<UserEntity>(this.table)
       .where('email', data.email)

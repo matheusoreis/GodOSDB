@@ -52,8 +52,8 @@ export default class ActorProvider {
     return row;
   }
 
-  public async update(data: UpdateActorDto): Promise<ActorEntity> {
-    await this.getOrFail(data.id);
+  public async update(id: number, data: UpdateActorDto): Promise<ActorEntity> {
+    await this.getOrFail(id);
 
     if (Object.keys(data).length === 0) {
       throw new BadRequestException(
@@ -62,34 +62,35 @@ export default class ActorProvider {
     }
 
     const [row] = await this.knex<ActorEntity>(this.table)
-      .where('id', data.id)
+      .where('id', id)
       .update({ ...data, updatedAt: new Date() })
       .returning('*');
     if (!row) {
       throw new BadRequestException(
-        `Falha ao atualizar o registro com id ${data.id}`,
+        `Falha ao atualizar o registro com id ${id}`,
       );
     }
 
     return row;
   }
 
-  public async delete(data: DeleteActorDto): Promise<{ message: string }> {
-    await this.getOrFail(data.id);
+  public async delete(
+    id: number,
+    body: DeleteActorDto,
+  ): Promise<ActorEntity[]> {
+    await this.getOrFail(id);
 
     const row = await this.knex<ActorEntity>(this.table)
-      .where('id', data.id)
-      .andWhere('accountId', data.accountId)
+      .where('id', id)
+      .andWhere('accountId', body.accountId)
       .del();
 
     if (!row) {
       throw new NotFoundException(
-        `Registro com o id ${data.id} não encontrado ou não pertence ao usuário com id ${data.accountId}.`,
+        `Registro com o id ${id} não encontrado ou não pertence ao usuário com id ${body.accountId}.`,
       );
     }
 
-    return {
-      message: `Personagem com id ${data.id}, apagado com sucesso!`,
-    };
+    return await this.getByAccountId(body.accountId);
   }
 }

@@ -15,35 +15,26 @@ import { DeleteActorDto } from './dtos/delete';
 
 @Controller('actor')
 export default class ActorController {
-  constructor(private readonly provider: ActorProvider) { }
-
-  @Get()
-  public async getAll() {
-    return await this.provider.getAll();
-  }
-
-  @Get(':id')
-  public async getById(@Param('id', ParseIntPipe) id: number) {
-    return await this.provider.getById(id);
-  }
-
-  @Get('account/:id')
-  public async getByAccountId(@Param('id', ParseIntPipe) id: number) {
-    return await this.provider.getByAccountId(id);
-  }
+  constructor(private readonly provider: ActorProvider) {}
 
   @Post()
   public async create(@Body() data: CreateActorDto) {
     return await this.provider.create(data);
   }
 
-  @Patch()
-  public async update(@Body() data: UpdateActorDto) {
-    return await this.provider.update(data);
+  @Patch(':id')
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateActorDto,
+  ) {
+    return await this.provider.update(id, body);
   }
 
-  @Delete()
-  public async delete(@Body() data: DeleteActorDto) {
-    return await this.provider.delete(data);
+  @Delete(':id')
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: DeleteActorDto,
+  ) {
+    return await this.provider.delete(id, body);
   }
 }

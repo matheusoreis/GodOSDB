@@ -26,12 +26,15 @@ export default class MapController {
   }
 
   @Post()
-  public async create(@Body() data: CreateMapDto) {
-    return await this.provider.create(data);
+  public async create(@Body() body: CreateMapDto) {
+    return await this.provider.create(body);
   }
 
-  @Patch()
-  public async update(@Body() data: UpdateMapDto) {
-    return await this.provider.update(data);
+  @Patch(':id')
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateMapDto,
+  ) {
+    return await this.provider.update(id, body);
   }
 }
