@@ -77,7 +77,7 @@ export default class ActorProvider {
   public async delete(
     id: number,
     body: DeleteActorDto,
-  ): Promise<ActorEntity[]> {
+  ): Promise<{ message: string }> {
     await this.getOrFail(id);
 
     const row = await this.knex<ActorEntity>(this.table)
@@ -91,6 +91,6 @@ export default class ActorProvider {
       );
     }
 
-    return await this.getByAccountId(body.accountId);
+    return { message: `Registro com o id ${id} deletado com sucesso.` };
   }
 }
