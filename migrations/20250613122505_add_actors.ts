@@ -4,6 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('actors', (table) => {
     table.increments('id').primary();
     table.string('name').notNullable();
+    table.string('sprite').notNullable();
     table.integer('directionX').notNullable();
     table.integer('directionY').notNullable();
     table.integer('positionX').notNullable();
